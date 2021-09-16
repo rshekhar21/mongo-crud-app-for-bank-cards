@@ -1,0 +1,289 @@
+<form action="/card/update" method="post" id="myform">
+  <div class="row">
+    <!-- 1st column -->
+    <div class="col-md-12 col-lg-6">
+      <!-- 0 id field hidden -->
+      <input type="text" id="id" name="_id" class="d-none" />
+
+      <!-- form group cardnum-issuer -->
+      <div class="row mb-3">
+        <div class="col">
+          <!-- 1 card number -->
+          <div class="mb-3">
+            <label for="number" class="form-label">Card Number</label>
+            <input
+              type="text"
+              class="form-control"
+              id="number"
+              name="number"
+              placeholder="1234 5678 1234 5678"
+              onkeypress="return formats(this,event)"
+              onkeyup="return numberValidation(event)"
+              required
+            />
+          </div>
+        </div>
+
+        <!-- 2 issuer -->
+        <div class="col">
+          <div class="mb-3">
+            <label for="issuer" class="form-label">Issued By</label>
+            <input
+              type="text"
+              class="form-control"
+              id="issuer"
+              name="issuer"
+              placeholder="AMEX"
+              required
+            />
+          </div>
+        </div>
+      </div>
+
+      <!-- form gorup expiary valid billdate-->
+      <div class="row mb-3">
+        <!-- expirary -->
+        <div class="col">
+          <div class="mb-3">
+            <label for="expiary" class="form-label">Expiary Month/Year</label>
+            <input
+              type="text"
+              class="form-control"
+              id="expiary"
+              name="expiary"
+              placeholder="05/24"
+            />
+          </div>
+        </div>
+
+        <!-- validfrom -->
+        <div class="col">
+          <div class="mb-3">
+            <label for="since" class="form-label">Valid From</label>
+            <input
+              type="text"
+              class="form-control"
+              id="since"
+              name="since"
+              placeholder="05/14"
+            />
+          </div>
+        </div>
+
+        <!-- 10 bill date -->
+        <div class="col">
+          <div class="mb-3">
+            <label for="billdate" class="form-label">Bill Date</label>
+            <input
+              type="number"
+              class="form-control"
+              id="billdate"
+              name="billdate"
+              placeholder="5"
+            />
+          </div>
+        </div>
+      </div>
+
+      <!-- form goroup account type and sttsus -->
+      <div class="row mb-3">
+        <!-- account type -->
+        <div class="col">
+          <div class="mb-3">
+            <label for="acntype" class="form-label">Account Type</label>
+            <select
+              class="form-select"
+              id="acntype"
+              name="acntype"
+              aria-label="Default select example"
+            >
+              <option selected>CREDIT</option>
+              <option value="Debit">DEBIT</option>
+              <option value="Debit">ATM</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- status -->
+        <div class="col">
+          <div class="col">
+            <div class="mb-3">
+              <label for="acntype" class="form-label">Status</label>
+              <select
+                class="form-select"
+                id="status"
+                name="status"
+                aria-label="Default select example"
+              >
+                <option selected>Enabled</option>
+                <option value="Debit">Disabled</option>
+                <option value="Debit">Blocked</option>
+                <option value="Debit">Stolen</option>
+                <option value="Debit">Losted</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- form group  card type  name on coard-->
+      <div class="row mb-3">
+        <div class="col-4">
+          <!-- 6 Card type -->
+          <div class="mb-3">
+            <label for="type" class="form-label">Card Type</label>
+            <select
+              class="form-select"
+              id="type"
+              name="type"
+              aria-label="Default select example"
+            >
+              <option selected>VISA</option>
+              <option value="Master">MasterCard</option>
+              <option value="Amex">AMEX</option>
+              <option value="Rupay">RuPay</option>
+              <option value="Rupay">Discover</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- 6 Name on Card -->
+        <div class="col">
+          <div class="mb-3">
+            <label for="name" class="form-label">Name on Card</label>
+            <input
+              type="text"
+              class="form-control"
+              id="name"
+              name="name"
+              placeholder="Mohan Kumar"
+            />
+          </div>
+        </div>
+      </div>
+
+      <!-- form group limit and cvv -->
+      <div class="row">
+        <!-- 7 limit -->
+        <div class="col">
+          <div class="mb-3">
+            <label for="limit" class="form-label">Total Limit</label>
+            <input
+              type="number"
+              class="form-control"
+              id="limit"
+              name="limit"
+              placeholder="25000"
+            />
+          </div>
+        </div>
+
+        <!-- cvv -->
+        <div class="col">
+          <div class="mb-3">
+            <label for="cvv" class="form-label">CVV Number</label>
+            <input
+              type="number"
+              class="form-control"
+              id="cvv"
+              name="cvv"
+              placeholder="355"
+            />
+          </div>
+        </div>
+
+        <!-- 9 pin -->
+        <div class="col">
+          <div class="mb-3">
+            <label for="pin" class="form-label">Pin Number</label>
+            <input
+              type="number"
+              class="form-control"
+              id="pin"
+              name="pin"
+              placeholder="1234"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2nd column -->
+    <div class="col-md-12 col-lg-6">
+      <!-- form group stmp pwd, helpline -->
+      <div class="row mb-3">
+        <div class="col">
+          <!-- 11 stmt password -->
+          <div class="mb-3">
+            <label for="stmtpwd" class="form-label">Statement Passwrod</label>
+            <input
+              type="text"
+              class="form-control"
+              id="stmtpwd"
+              name="stmtpwd"
+              placeholder="Madh0504"
+            />
+          </div>
+        </div>
+
+        <!-- 12 helpline -->
+        <div class="col">
+          <div class="mb-3">
+            <label for="helpline" class="form-label">Helpline</label>
+            <input
+              type="text"
+              class="form-control"
+              id="helpline"
+              name="helpline"
+              placeholder="1800010204564"
+            />
+          </div>
+        </div>
+      </div>
+
+      <!-- 14 login url -->
+      <div class="row mb-3">
+        <div class="col">
+          <div class="mb-3">
+            <label for="loginurl" class="form-label">Login Url</label>
+            <input
+              type="text"
+              class="form-control"
+              id="loginurl"
+              name="loginurl"
+              placeholder=""
+            />
+          </div>
+        </div>
+      </div>
+
+      <!-- 15 website -->
+      <div class="row mb-3">
+        <div class="col">
+          <div class="mb-3">
+            <label for="website" class="form-label">Card Website</label>
+            <input
+              type="text"
+              class="form-control"
+              id="website"
+              name="website"
+              placeholder="www.card.com"
+            />
+          </div>
+        </div>
+      </div>
+
+      <!-- 16 notes -->
+      <div>
+        <label for="notes" class="form-label">Card Descriptino / Notes</label>
+        <textarea
+          class="form-control"
+          id="notes"
+          name="notes"
+          rows="1"
+          style="margin-top: 0px; margin-bottom: 0px; height: 140px"
+        ></textarea>
+      </div>
+    </div>
+  </div>
+</form>

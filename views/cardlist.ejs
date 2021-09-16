@@ -1,0 +1,195 @@
+<%-include('./partials/header')%>
+<!-- <div class="container mb-3">
+  <button type="button" id="refresh" class="btn btn-link">Refresh</button>
+</div> -->
+<div class="container-fluid">
+  <div class="row">
+    <div>
+      <!-- Button trigger modal -->
+      <!-- <button
+        type="button"
+        class="btn btn-primary"
+        data-bs-toggle="modal"
+        data-bs-target="#staticBackdrop"
+      >
+        Launch static backdrop modal
+      </button> -->
+
+      <!-- Modal -->
+      <div
+        class="modal fade"
+        id="staticBackdrop"
+        data-bs-backdrop="static"
+        data-bs-keyboard="false"
+        tabindex="-1"
+        aria-labelledby="staticBackdropLabel"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog modal-dialog-scrollable modal-xl">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="staticBackdropLabel">UPDATE CARD</h5>
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+            <div class="modal-body"><%-include('./partials/formupdate')%></div>
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-secondary"
+                data-bs-dismiss="modal"
+              >
+                Close
+              </button>
+              <button type="submit" form="myform" class="btn btn-primary">
+                Update
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col">
+      <table class="table table-hover caption-top">
+        <caption>
+          List of Credit / Debit Cards
+        </caption>
+        <thead class="table-light">
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Card Number</th>
+            <th scope="col">Issuer</th>
+            <th scope="col">Validity</th>
+            <th scope="col">From</th>
+            <th scope="col">Status</th>
+            <th scope="col">A/c Type</th>
+            <th scope="col">Card Type</th>
+            <th scope="col">Name on Card</th>
+            <th scope="col">Limit</th>
+            <th scope="col">Cvv</th>
+            <th scope="col">Pin</th>
+            <th scope="col">Billdate</th>
+            <th scope="col">Stmt. Pwd.</th>
+            <th scope="col">Helpline</th>
+            <th scope="col">NetBanking</th>
+            <th scope="col">Website</th>
+            <th scope="col">Notes</th>
+            <th scope="col" class="d-none">id</th>
+          </tr>
+        </thead>
+        <tbody id="tbody"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+<%-include('./partials/footer')%>
+
+<script>
+  const log = console.log;
+  const refresh = document.querySelector("#refresh");
+  const tbody = document.querySelector("#tbody");
+  const myform = document.querySelector("#myform");
+
+  function formats(ele, e) {
+    if (ele.value.length < 19) {
+      ele.value = ele.value.replace(/\W/gi, "").replace(/(.{4})/g, "$1 ");
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  function numberValidation(e) {
+    e.target.value = e.target.value.replace(/[^\d ]/g, "");
+    return false;
+  }
+  // refresh.addEventListener("click", viewList);
+  const url = "/card/read";
+  // window.addEventListener("DOMContentLoaded", viewlist);
+  window.onload = () => viewList();
+
+  function viewList() {
+    fetch(url)
+      .then((res) => res.json())
+      .then((data) => {
+        tr = "";
+        data.forEach((item, i) => {
+          tr += `<tr class="edit">
+            <th scope="row">${i + 1}</th>
+            <td class='format'>
+              <a 
+                href="#" 
+                class="link-primary abc" 
+                data-bs-toggle="modal" 
+                data-bs-target="#staticBackdrop"
+                >
+                ${item.number}
+              </a></td>
+            <td>${item.issuer}</td>
+            <td>${item.expiary}</td>
+            <td>${item.since}</td>
+            <td>${item.status}</td>
+            <td>${item.acntype}</td>
+            <td>${item.type}</td>
+            <td>${item.name}</td>
+            <td>${item.limit}</td>
+            <td>${item.cvv}</td>
+            <td>${item.pin}</td>
+            <td>${item.billdate}</td>
+            <td>${item.stmtpwd}</td>
+            <td>${item.helpline}</td>
+            <td>${item.loginurl}</td>
+            <td>${item.website}</td>
+            <td>${item.notes}</td>
+            <td class="d-none">${item._id}</td>
+          </tr>`;
+        });
+        tbody.innerHTML = tr;
+        tbody.addEventListener("click", function (e) {
+          // this function can be used to click on any cell of the row to get the id
+          // const id = e.path[1].cells[17].innerText;
+          // log(id, e.path[1].cells.length);
+          // log(e.path[1].cells[1].children[0]);
+          // log(e);
+        });
+
+        const link = document.querySelectorAll("tbody td > a");
+        link.forEach(function (r) {
+          log(r.innerText.replaceAll(" ", "-"));
+          r.innerText = r.innerText.replaceAll(" ", "-");
+          r.addEventListener("click", function (e) {
+            // alert();
+            const lnth = e.path[2].cells.length - 1;
+            const id = e.path[2].cells[lnth].innerText;
+            fetch("/card/edit", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ id }),
+            })
+              .then((res) => res.json())
+              .then((data) => {
+                populate(myform, data);
+                // localStorage.setItem("card", card);
+                // document.cookie =
+                //   "username=John Doe; expires=Thu, 16 Sep 2021 12:00:00 UTC; path=/";
+                // document.cookie = "card" + "=" + card;
+              })
+              .catch((err) => log(err));
+            // log(e.path[2].cells[17].innerText);
+          });
+        });
+
+        // Array.from(tbody.rows).forEach(function (item) {
+        //   item.addEventListener("click", function (e) {
+        //     // log(e.target.innerText);
+        //   });
+        // });
+      })
+      .catch((err) => log(err));
+  }
+  //https://github.com/dannyvankooten/populate.js
+</script>
