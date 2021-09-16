@@ -49,11 +49,12 @@ const create = async (req, res) => {
     const result = await model.create(card);
     // res.send(result);
     // log(result);
-    res.redirect("/newcard");
+    res.redirect("/new");
   } catch (error) {
     log(error);
   }
 };
+
 const read = async (req, res) => {
   try {
     const result = await model.find();
@@ -62,6 +63,7 @@ const read = async (req, res) => {
     res.send(error);
   }
 };
+
 const edit = async (req, res) => {
   const { id: _id } = req.body;
   try {
@@ -121,10 +123,16 @@ const update = async (req, res) => {
   } catch (error) {
     res.json(error);
   }
-  // res.json("ok-123");
 };
 
-const delcard = (req, res) => {};
-const showcard = (req, res) => {};
+const delcard = async (req, res) => {
+  const { id: _id } = req.body;
+  try {
+    let result = await model.findByIdAndDelete(_id);
+    res.json(result);
+  } catch (error) {
+    res.json(error);
+  }
+};
 
-module.exports = { create, read, update, delcard, showcard, edit };
+module.exports = { create, read, update, delcard, edit };

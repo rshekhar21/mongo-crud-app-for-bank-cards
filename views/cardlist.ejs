@@ -78,6 +78,20 @@
             <th scope="col">NetBanking</th>
             <th scope="col">Website</th>
             <th scope="col">Notes</th>
+            <th scope="col" class="text-center">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                fill="currentColor"
+                class="bi bi-trash-fill text-danger"
+                viewBox="0 0 16 16"
+              >
+                <path
+                  d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z"
+                />
+              </svg>
+            </th>
             <th scope="col" class="d-none">id</th>
           </tr>
         </thead>
@@ -145,6 +159,9 @@
             <td>${item.loginurl}</td>
             <td>${item.website}</td>
             <td>${item.notes}</td>
+            <td class="delcard text-center">
+              <button type="button" class="btn btn-link text-danger">X</button>
+            </td>
             <td class="d-none">${item._id}</td>
           </tr>`;
         });
@@ -157,14 +174,49 @@
           // log(e);
         });
 
+        const delcard = document.querySelectorAll(".delcard");
+        delcard.forEach((card) => {
+          card.addEventListener("click", (e) => {
+            const len = e.path[2].cells.length - 1;
+            const id = e.path[2].cells[len].innerText;
+            const cnum = e.path[2].cells[1].innerText;
+            const l4dig = cnum.split("-").pop();
+            const conf = confirm("Are you sure you want to delete this card?");
+            if (conf) {
+              const reconf = prompt(
+                "Please enter card Last 4 digit to proceed?"
+              );
+              if (l4dig === reconf) {
+                //process to delete card
+                fetch("/card/delcard", {
+                  method: "POST",
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify({ id }),
+                })
+                  .then((response) => response.json())
+                  .then((data) => {
+                    // log(data);
+                    alert(`Card Number ${data.number} Deleted Successfully!`);
+                    location.assign("/list");
+                  })
+                  .catch((error) => {
+                    log(error);
+                  });
+              } else {
+                alert("Card Delete Failed! Pleae Try Again");
+              }
+            }
+          });
+        });
+
         const link = document.querySelectorAll("tbody td > a");
         link.forEach(function (r) {
-          log(r.innerText.replaceAll(" ", "-"));
+          // log(r.innerText.replaceAll(" ", "-"));
           r.innerText = r.innerText.replaceAll(" ", "-");
           r.addEventListener("click", function (e) {
             // alert();
-            const lnth = e.path[2].cells.length - 1;
-            const id = e.path[2].cells[lnth].innerText;
+            const len = e.path[2].cells.length - 1;
+            const id = e.path[2].cells[len].innerText;
             fetch("/card/edit", {
               method: "POST",
               headers: { "Content-Type": "application/json" },

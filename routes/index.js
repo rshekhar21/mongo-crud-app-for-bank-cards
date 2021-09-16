@@ -8,4 +8,3 @@ router.get("/read", controller.read);
 router.post("/update", controller.update);
 router.post("/edit", controller.edit);
 router.post("/delcard", controller.delcard);
-router.get("/showcard", controller.showcard);
